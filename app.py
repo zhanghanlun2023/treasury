@@ -28,7 +28,7 @@ ACCENT_GOLD = "#CFAF70"
 TEXT_MAIN = "#0F172A"
 TEXT_SUB = "#6B7280"
 
-BASE_CSS = f"""
+BASE_CSS = """
 <style>
 /* 整体背景 —— 淡蓝渐变而不是暗黑 */
 html, body, .stApp {{

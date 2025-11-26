@@ -1,5 +1,5 @@
 # app.py
-# AI 赋能司库：暗黑科技主题 · 现金流预测 & 汇率风险 & 资金池模拟器
+# AI 赋能司库：现金流预测 & 汇率风险 & 资金池模拟器
 
 import os
 import warnings

@@ -768,137 +768,124 @@ def render_pool_simulator_page():
 
 def render_home_page():
 
-    # 注：必须放在 markdown 中并开启 unsafe_allow_html 才能渲染 HTML
-    st.markdown(
-        """
-        <style>
+    # 全局首页 CSS
+    st.markdown("""
+    <style>
+    @keyframes floatCard {
+        0%   { transform: translateY(0px); }
+        50%  { transform: translateY(-6px); }
+        100% { transform: translateY(0px); }
+    }
+    .glass-card {
+        background: rgba(255,255,255,0.78);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-radius: 18px;
+        padding: 18px;
+        border: 1px solid rgba(148,163,184,0.35);
+        box-shadow: 0 8px 20px rgba(30,64,175,0.12);
+        animation: floatCard 4.5s ease-in-out infinite;
+    }
+    .pulse-dot {
+        width: 10px;
+        height: 10px;
+        background: #22C55E;
+        box-shadow: 0 0 12px rgba(34,197,94,0.7);
+        border-radius: 9999px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
-        /* === 背景浮动卡片动画 === */
-        @keyframes floatCard {
-            0%   { transform: translateY(0px); }
-            50%  { transform: translateY(-6px); }
-            100% { transform: translateY(0px); }
-        }
+    # ================= 首页 HTML 主体 ===================
+    st.markdown("""
+    <div style="position:relative; border-radius:24px; padding:36px; 
+                background: linear-gradient(180deg,#EAF4FF 0%,#FFFFFF 60%); 
+                overflow:hidden;">
 
-        .glass-card {
-            background: rgba(255,255,255,0.82);
-            border-radius: 18px;
-            border: 1px solid rgba(148,163,184,0.45);
-            box-shadow: 0 16px 40px rgba(15,23,42,0.16);
-            padding: 14px 16px;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            animation: floatCard 4.5s ease-in-out infinite;
-        }
+        <!-- SVG 曲线 HERO 背景 -->
+        <div style="position:absolute; inset:0; opacity:0.65; pointer-events:none;">
+            <svg viewBox="0 0 1200 320" xmlns="http://www.w3.org/2000/svg">
 
-        .pulse-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 999px;
-            background: #22C55E;
-            box-shadow: 0 0 14px rgba(34,197,94,0.9);
-        }
+                <defs>
+                    <linearGradient id="curveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#60A5FA"/>
+                        <stop offset="60%" stop-color="#22D3EE"/>
+                        <stop offset="100%" stop-color="#FACC15"/>
+                    </linearGradient>
+                </defs>
 
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+                <path d="M0,240 C220,120 520,280 820,150 C1020,80 1160,120 1200,130"
+                      fill="none" stroke="url(#curveGrad)" stroke-width="3" stroke-opacity="0.9"/>
 
-    # ============ 亮色科技背景 + SVG ==============
-    st.markdown(
-        """
-        <div style="position:relative; border-radius:24px; padding:30px; 
-                    background: linear-gradient(180deg,#EAF4FF 0%,#FFFFFF 60%); 
-                    overflow:hidden;">
-
-            <!-- SVG 曲线 HERO 背景 -->
-            <div style="position:absolute; inset:0; opacity:0.65; pointer-events:none;">
-                <svg viewBox="0 0 1200 320" xmlns="http://www.w3.org/2000/svg">
-
-                    <defs>
-                        <linearGradient id="curveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="#60A5FA"/>
-                            <stop offset="60%" stop-color="#22D3EE"/>
-                            <stop offset="100%" stop-color="#FACC15"/>
-                        </linearGradient>
-                    </defs>
-
-                    <!-- 主曲线 -->
-                    <path d="M0,240 C220,120 520,280 820,150 C1020,80 1160,120 1200,130"
-                          fill="none" stroke="url(#curveGrad)" stroke-width="3" stroke-opacity="0.9"/>
-
-                    <!-- 第二条柔和曲线 -->
-                    <path d="M0,260 C260,150 520,310 860,190 C1040,130 1160,160 1200,180"
-                          fill="none" stroke="url(#curveGrad)" stroke-width="2" stroke-opacity="0.35"/>
-                </svg>
-            </div>
-
-            <!-- 内容层（必须加 z-index） -->
-            <div style="position:relative; z-index:2;">
-
-                <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-                    <div class="pulse-dot"></div>
-                    <div style="font-size:13px;color:#6B7280;">
-                        Financial AI · Treasury Intelligence
-                    </div>
-                </div>
-
-                <div style="font-size:32px;font-weight:700;color:#0F172A;">
-                    AI 司库 · 科技淡蓝财务驾驶舱
-                </div>
-
-                <div style="font-size:17px;color:#475569;margin-bottom:16px;">
-                    一个整合 <span style="color:#2563EB;font-weight:600;">现金流预测</span>、
-                    <span style="color:#2563EB;font-weight:600;">汇率风险管理</span> 与
-                    <span style="color:#2563EB;font-weight:600;">集团资金池模拟</span> 的智能财务工作台，
-                    用于支持资金统筹、风险预警与跨境业务的数字化决策。
-                </div>
-
-                <!-- 模块卡片 -->
-                <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:20px;">
-
-                    <div class="glass-card" style="flex:1;min-width:260px;">
-                        <div style="font-size:15px;font-weight:600;color:#111827;">
-                            模块一：AI 现金流预测
-                        </div>
-                        <div style="font-size:13px;color:#6B7280;margin-top:6px;">
-                            LSTM + Dropout 不确定性预测，支持置信区间与自动点评。
-                        </div>
-                    </div>
-
-                    <div class="glass-card" style="flex:1;min-width:260px;">
-                        <div style="font-size:15px;font-weight:600;color:#111827;">
-                            模块二：汇率风险监控
-                        </div>
-                        <div style="font-size:13px;color:#6B7280;margin-top:6px;">
-                            GBM 路径模拟 + VaR 指标，用于外币敞口风险评估。
-                        </div>
-                    </div>
-
-                    <div class="glass-card" style="flex:1;min-width:260px;">
-                        <div style="font-size:15px;font-weight:600;color:#111827;">
-                            模块三：资金池模拟
-                        </div>
-                        <div style="font-size:13px;color:#6B7280;margin-top:6px;">
-                            演示总部与子公司之间的资金归集与下拨，提高资金使用效率。
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+                <path d="M0,260 C260,150 520,310 860,190 C1040,130 1160,160 1200,180"
+                      fill="none" stroke="url(#curveGrad)" stroke-width="2" stroke-opacity="0.35"/>
+            </svg>
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+
+        <!-- 内容层 -->
+        <div style="position:relative; z-index:2;">
+
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                <div class="pulse-dot"></div>
+                <div style="font-size:13px;color:#6B7280;">
+                    Financial AI · Treasury Intelligence
+                </div>
+            </div>
+
+            <div style="font-size:36px;font-weight:700;color:#0F172A;">
+                AI 司库 · 科技淡蓝财务驾驶舱
+            </div>
+
+            <div style="font-size:17px;color:#475569;margin-bottom:18px;">
+                一个整合 <span style="color:#2563EB;font-weight:600;">现金流预测</span>、
+                <span style="color:#2563EB;font-weight:600;">汇率风险管理</span> 与
+                <span style="color:#2563EB;font-weight:600;">集团资金池模拟</span> 的智能财务工作台，
+                用于支持资金统筹、风险预警与跨境业务的数字化决策。
+            </div>
+
+            <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:22px;">
+
+                <div class="glass-card" style="flex:1;min-width:260px;">
+                    <div style="font-size:15px;font-weight:600;color:#111827;">
+                        模块一：AI 现金流预测
+                    </div>
+                    <div style="font-size:13px;color:#6B7280;margin-top:6px;">
+                        LSTM + Dropout 不确定性预测，支持置信区间与自动点评。
+                    </div>
+                </div>
+
+                <div class="glass-card" style="flex:1;min-width:260px;">
+                    <div style="font-size:15px;font-weight:600;color:#111827;">
+                        模块二：汇率风险监控
+                    </div>
+                    <div style="font-size:13px;color:#6B7280;margin-top:6px;">
+                        GBM 路径模拟 + VaR 指标，用于外币敞口风险评估。
+                    </div>
+                </div>
+
+                <div class="glass-card" style="flex:1;min-width:260px;">
+                    <div style="font-size:15px;font-weight:600;color:#111827;">
+                        模块三：资金池模拟
+                    </div>
+                    <div style="font-size:13px;color:#6B7280;margin-top:6px;">
+                        演示总部与子公司之间的资金归集与下拨，提高资金使用效率。
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    """, unsafe_allow_html=True)
 
     st.markdown("### 🚀 使用说明")
-    st.markdown(
-        """
-        - 左侧选择功能模块  
-        - 可上传真实现金流数据或使用模拟数据  
-        - 可用于司库建设展示、内部培训与方案汇报  
-        """
-    )
+    st.markdown("""
+    - 在左侧选择模块进入功能  
+    - 可上传真实现金流数据进行预测  
+    - 用于司库建设演示、数字化呈现和方案展示  
+    """)
+
 
 
 

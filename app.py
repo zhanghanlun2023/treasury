@@ -898,55 +898,154 @@ def render_pool_simulator_page():
 # ============================================================
 # 十、首页动画（亮色科技玻璃）
 # ============================================================
-
 def render_home_page():
+    # ==========================
+    # 科技感动画光效 CSS（亮色科技玻璃风）
+    # ==========================
     st.markdown(
         """
-        <div class="home-hero">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <style>
+
+        /* 🌟 光束动画（Neon Beam） */
+        @keyframes neon-beam {
+            0%   { opacity: 0.0; transform: translateX(-200px) translateY(-80px) rotate(12deg); }
+            50%  { opacity: 0.35; transform: translateX(0px) translateY(0px) rotate(12deg); }
+            100% { opacity: 0.0; transform: translateX(200px) translateY(80px) rotate(12deg); }
+        }
+
+        .neon-beam-layer {
+            position:absolute;
+            left:0;
+            right:0;
+            top:0;
+            bottom:0;
+            background: linear-gradient(120deg, rgba(59,130,246,0.25), rgba(56,189,248,0.20), rgba(250,204,21,0.18));
+            filter: blur(36px);
+            animation: neon-beam 6s ease-in-out infinite;
+            pointer-events:none;
+        }
+
+        /* 🌊 扩散光波（Glow Wave） */
+        @keyframes glow-wave {
+            0% { opacity:0.18; transform:scale(1); }
+            50% { opacity:0.32; transform:scale(1.06); }
+            100% { opacity:0.18; transform:scale(1); }
+        }
+
+        .glow-wave {
+            position:absolute;
+            width:180%;
+            height:180%;
+            top:-40%;
+            left:-40%;
+            background: radial-gradient(circle, rgba(147,197,253,0.28), rgba(255,255,255,0));
+            animation: glow-wave 5.5s linear infinite;
+            filter: blur(14px);
+            pointer-events:none;
+        }
+
+        /* 📦 玻璃卡片浮动动画 */
+        @keyframes slow-float {
+            0%   { transform: translateY(0px); }
+            50%  { transform: translateY(-6px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .float-card {
+            animation: slow-float 4.5s ease-in-out infinite;
+        }
+
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # ==========================
+    # 首页内容区（亮色科技玻璃）
+    # ==========================
+    st.markdown(
+        """
+        <div class="home-hero" style="position:relative; overflow:hidden; border-radius:24px;">
+
+            <!-- 动态光效层 -->
+            <div class="neon-beam-layer"></div>
+            <div class="glow-wave"></div>
+
+            <!-- 🔹 顶部小标签 -->
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
                 <div class="pulse-dot"></div>
-                <div style="font-size:13px;color:#6B7280;">Treasury · AI · Risk Management</div>
+                <div style="font-size:13px;color:#6B7280;">Financial AI · Treasury Intelligence</div>
             </div>
-            <div class="home-hero-title">AI 赋能司库 · 科技玻璃财务驾驶舱</div>
-            <div class="home-hero-sub">
-                以现金流预测为核心，联动汇率风险监控与资金池模拟，
-                打造面向现代投资与海外项目的数字化财务中枢。
+
+            <!-- 🔹 主标题（更高级更科技） -->
+            <div class="home-hero-title" style="font-size:36px; font-weight:700; color:#0F172A;">
+                科技赋能财务 · 智能化司库中枢
             </div>
-            <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;">
-                <div class="card float-card" style="flex:1;min-width:220px;">
-                    <div class="card-title">模块一：现金流预测与预警</div>
-                    <div class="card-sub">
-                        基于 LSTM + MC Dropout 的日度现金流预测，
-                        提供情景分析、缺口预警与 AI 自动点评。
+
+            <!-- 🔹 副标题（专业 + 科技） -->
+            <div class="home-hero-sub" style="font-size:18px; color:#475569;">
+                一个整合 <span style="color:#2563EB;font-weight:600;">现金流预测</span>、
+                <span style="color:#2563EB;font-weight:600;">汇率风险管理</span> 与
+                <span style="color:#2563EB;font-weight:600;">集团资金池调度</span> 的
+                智能财务平台，支撑资金统筹、风险预警与跨境业务的数字化决策。
+            </div>
+
+            <!-- 🔹 三个功能模块卡片 -->
+            <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:22px;">
+
+                <!-- 卡片1 -->
+                <div class="card float-card" style="flex:1;min-width:240px;">
+                    <div class="card-title" style="font-size:15px;font-weight:600;color:#1F2937;">
+                        模块一：AI 现金流预测
+                    </div>
+                    <div class="card-sub" style="font-size:13px;">
+                        通过 LSTM + MC Dropout 生成带置信区间的现金流预测，
+                        提供情景分析、资金缺口预警与自动化点评。
                     </div>
                 </div>
-                <div class="card float-card" style="flex:1;min-width:220px;">
-                    <div class="card-title">模块二：汇率风险监控</div>
-                    <div class="card-sub">
-                        使用 GBM 模拟外币敞口价值分布，输出 VaR 指标，
-                        服务于海外项目与跨境结算管理。
+
+                <!-- 卡片2 -->
+                <div class="card float-card" style="flex:1;min-width:240px;">
+                    <div class="card-title" style="font-size:15px;font-weight:600;color:#1F2937;">
+                        模块二：汇率风险监控
+                    </div>
+                    <div class="card-sub" style="font-size:13px;">
+                        采用 GBM 模型模拟外币敞口变化，输出 VaR 指标，
+                        支持海外项目与跨境结算的汇率风险管理。
                     </div>
                 </div>
-                <div class="card float-card" style="flex:1;min-width:220px;">
-                    <div class="card-title">模块三：集团资金池模拟</div>
-                    <div class="card-sub">
-                        演示总部与子公司间资金集中与下拨，
-                        支撑内部银行与司库体系的制度设计。
+
+                <!-- 卡片3 -->
+                <div class="card float-card" style="flex:1;min-width:240px;">
+                    <div class="card-title" style="font-size:15px;font-weight:600;color:#1F2937;">
+                        模块三：集团资金池调度
+                    </div>
+                    <div class="card-sub" style="font-size:13px;">
+                        模拟总部与子公司之间的资金归集与下拨流程，
+                        演示内部银行和统一司库体系的资金统筹能力。
                     </div>
                 </div>
+
             </div>
+
         </div>
         """,
-        unsafe_allow_html=True,
+        unsafe_allow_html=True
     )
 
-    st.markdown("### 使用指南")
+    # ==========================
+    # 使用说明
+    # ==========================
+    st.markdown("### 🚀 使用说明（建议从左侧切换模块）")
     st.markdown(
-        "- 左侧选择不同模块：**首页 / 现金流预测主面板 / 汇率风险监控 / 资金池模拟器**；  \n"
-        "- 现金流预测模块支持上传 CSV 或使用模拟数据进行训练与预测；  \n"
-        "- 汇率与资金池模块以场景模拟形式展示 AI 司库在风险管理和资金统筹上的应用。"
+        """
+        - **首页**：展示系统概览、科技动画效果与模块介绍。  
+        - **现金流预测主面板**：支持 CSV 上传、AI 预测、置信区间、风险提示等。  
+        - **汇率风险监控**：模拟外币敞口价值分布，提供 VaR 和风险解读。  
+        - **资金池模拟器**：演示集团式资金集中管理与内部银行机制。  
+        - 所有模块均可用于方案汇报、司库建设展示及内部交流。
+        """
     )
-
 
 # ============================================================
 # 十一、现金流预测主面板

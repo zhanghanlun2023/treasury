@@ -1,5 +1,5 @@
 # app.py
-# AI 赋能司库：现金流预测 & 汇率风险 & 资金池模拟器
+# AI 赋能司库：科技玻璃风 · 现金流预测 & 汇率风险 & 资金池模拟器
 
 import os
 import warnings
@@ -15,21 +15,22 @@ import plotly.graph_objs as go
 warnings.filterwarnings("ignore")
 
 # ============================================================
-# 一、全局暗黑科技 UI 主题（蓝金 + 霓虹色）
+# 一、全局科技玻璃 UI 主题（亮色 + 科技蓝）
 # ============================================================
 
-BLUE = "#00BFFF"        # 霓虹蓝
-GOLD = "#CFAF70"        # 金色点缀
-BG_DARK = "#050816"     # 深色背景
-CARD_BG = "#0B1020"     # 卡片背景
-TEXT_MAIN = "#E5E7EB"   # 主体文字
-TEXT_SUB = "#9CA3AF"    # 次级文字
+PRIMARY_BLUE = "#2563EB"   # 科技蓝
+ACCENT_CYAN = "#06B6D4"    # 青色高光
+ACCENT_GOLD = "#CFAF70"    # 金色点缀
+BG_MAIN = "#F3F6FB"        # 页面主背景
+TEXT_MAIN = "#0F172A"      # 深色正文
+TEXT_SUB = "#6B7280"       # 次要文字
 
 BASE_CSS = f"""
 <style>
 body {{
-    background-color: {BG_DARK};
+    background: radial-gradient(circle at top left, #E0EAFF 0, #F9FAFB 40%, #EEF2FF 100%);
     color: {TEXT_MAIN};
+    font-family: "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }}
 
 h1, h2, h3, h4, h5, h6 {{
@@ -38,25 +39,27 @@ h1, h2, h3, h4, h5, h6 {{
 }}
 
 .big-number {{
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 700;
-    color: {BLUE};
+    color: {PRIMARY_BLUE};
     text-align: center;
 }}
 
 .big-number-gold {{
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 700;
-    color: {GOLD};
+    color: {ACCENT_GOLD};
     text-align: center;
 }}
 
 .card {{
-    background: radial-gradient(circle at 10% 20%, rgba(32, 45, 72, 0.95) 0%, rgba(9, 11, 25, 0.98) 60%);
-    padding: 16px;
-    border-radius: 14px;
-    border: 1px solid rgba(148, 163, 184, 0.5);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    background: rgba(255, 255, 255, 0.82);
+    border-radius: 16px;
+    border: 1px solid rgba(148, 163, 184, 0.55);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+    padding: 16px 18px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }}
 
 .card-title {{
@@ -68,8 +71,9 @@ h1, h2, h3, h4, h5, h6 {{
 
 .card-sub {{
     font-size: 12px;
-    color: #6B7280;
+    color: #9CA3AF;
     text-align: center;
+    margin-top: 4px;
 }}
 
 .block-title {{
@@ -82,7 +86,7 @@ h1, h2, h3, h4, h5, h6 {{
 
 hr {{
     border: none;
-    border-top: 1px solid rgba(75, 85, 99, 0.8);
+    border-top: 1px solid rgba(209, 213, 219, 0.9);
     margin: 12px 0 18px 0;
 }}
 
@@ -90,25 +94,28 @@ hr {{
     position: relative;
     overflow: hidden;
     border-radius: 24px;
-    padding: 40px 30px;
+    padding: 32px 28px;
     background:
-        radial-gradient(circle at 0% 0%, rgba(59,130,246,0.20) 0, transparent 40%),
-        radial-gradient(circle at 100% 0%, rgba(250,204,21,0.15) 0, transparent 45%),
-        radial-gradient(circle at 50% 100%, rgba(236,72,153,0.18) 0, transparent 50%),
-        #020617;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.85);
+        radial-gradient(circle at 0% 0%, rgba(59,130,246,0.25) 0, transparent 45%),
+        radial-gradient(circle at 100% 0%, rgba(56,189,248,0.20) 0, transparent 50%),
+        radial-gradient(circle at 50% 100%, rgba(250,204,21,0.18) 0, transparent 50%),
+        #FFFFFFCC;
+    box-shadow: 0 24px 60px rgba(15,23,42,0.18);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 }}
 
 .home-hero-title {{
-    font-size: 32px;
+    font-size: 30px;
     font-weight: 700;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
+    color: {TEXT_MAIN};
 }}
 
 .home-hero-sub {{
-    font-size: 18px;
+    font-size: 17px;
     color: {TEXT_SUB};
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }}
 
 .pulse-dot {{
@@ -116,17 +123,25 @@ hr {{
     height: 10px;
     border-radius: 999px;
     background: #22C55E;
-    box-shadow: 0 0 12px rgba(34,197,94,0.9);
+    box-shadow: 0 0 14px rgba(34,197,94,0.9);
 }}
 
 @keyframes float {{
     0% {{ transform: translateY(0px); }}
-    50% {{ transform: translateY(-10px); }}
+    50% {{ transform: translateY(-8px); }}
     100% {{ transform: translateY(0px); }}
 }}
 
 .float-card {{
     animation: float 4s ease-in-out infinite;
+}}
+
+.sidebar-header {{
+    font-size: 14px;
+    font-weight: 600;
+    color: {TEXT_MAIN};
+    margin-bottom: 6px;
+    margin-top: 12px;
 }}
 </style>
 """
@@ -155,7 +170,7 @@ def format_date_series(s: pd.Series) -> pd.Series:
 
 
 def styled_table(df: pd.DataFrame):
-    """暗黑主题风格的表格渲染"""
+    """亮色科技风表格样式"""
     if df.empty:
         return df.style
 
@@ -175,18 +190,18 @@ def styled_table(df: pd.DataFrame):
             {
                 "selector": "th",
                 "props": [
-                    ("background-color", "#111827"),
-                    ("color", "#E5E7EB"),
+                    ("background-color", "#EFF4FF"),
+                    ("color", "#111827"),
                     ("font-weight", "600"),
-                    ("border-bottom", "1px solid #374151"),
+                    ("border-bottom", "1px solid #CBD5F5"),
                 ],
             },
             {
                 "selector": "td",
                 "props": [
-                    ("background-color", "#020617"),
-                    ("color", "#D1D5DB"),
-                    ("border-bottom", "1px solid #1F2933"),
+                    ("background-color", "#FFFFFF"),
+                    ("color", "#111827"),
+                    ("border-bottom", "1px solid #E5E7EB"),
                 ],
             },
         ]
@@ -330,9 +345,8 @@ def train_lstm_model(df, feature_cols, target="net_cash_flow",
 
     X_seq, y_seq = create_sequences(X_scaled, y_scaled, window)
 
-    # 样本太少，直接不训练，给出提示
     if len(X_seq) < 10:
-        raise ValueError("样本量过少，无法训练 LSTM 模型，请保证数据至少有 100 天左右。")
+        raise ValueError("样本量过少，无法训练 LSTM 模型，请保证数据至少有约 100 天。")
 
     split = int(len(X_seq) * 0.8)
     X_train, X_val = X_seq[:split], X_seq[split:]
@@ -341,7 +355,7 @@ def train_lstm_model(df, feature_cols, target="net_cash_flow",
     from tensorflow.keras.callbacks import EarlyStopping
     es = EarlyStopping(patience=5, restore_best_weights=True)
 
-    # ---------- 尝试先用 LSTM 训练 ----------
+    # 尝试 LSTM，如失败则回退到简单模型
     try:
         model = build_lstm_model((window, X_seq.shape[2]))
         model.fit(
@@ -353,7 +367,6 @@ def train_lstm_model(df, feature_cols, target="net_cash_flow",
             verbose=0
         )
     except Exception:
-        # ---------- LSTM 崩溃时，自动改用简单 Dropout 模型 ----------
         model = build_simple_dropout_model((window, X_seq.shape[2]))
         model.fit(
             X_train, y_train,
@@ -499,7 +512,7 @@ def sensitivity_to_chinese(df: pd.DataFrame) -> pd.DataFrame:
 
 
 # ============================================================
-# 七、Plotly 暗黑科技大屏图表 & AI 自动点评
+# 七、Plotly 图表 & AI 自动点评（亮色科技风）
 # ============================================================
 
 def build_forecast_figure(
@@ -508,12 +521,12 @@ def build_forecast_figure(
     scenario_name,
     viz_mode="标准模式",
 ):
-    template = "plotly_dark"
+    template = "plotly_white"
 
-    neon_blue = "#00BFFF"
-    laser_purple = "#BF3EFF"
-    band_color = "rgba(0, 191, 255, 0.18)"
-    zero_line_color = "#FF4B4B"
+    neon_blue = "#2563EB"
+    laser_purple = "#8B5CF6"
+    band_color = "rgba(37, 99, 235, 0.12)"
+    zero_line_color = "#DC2626"
 
     dates_hist = format_date_series(history["date"])
     dates_fut = forecast_df["日期"]
@@ -527,7 +540,7 @@ def build_forecast_figure(
             y=hist_values,
             mode="lines",
             name="历史净现金流",
-            line=dict(color=neon_blue, width=4),
+            line=dict(color=neon_blue, width=3),
             hovertemplate="<b>日期</b>: %{x}<br><b>净现金流</b>: %{y:,.2f}<extra></extra>",
         )
     )
@@ -538,7 +551,7 @@ def build_forecast_figure(
             y=forecast_df["预测均值"],
             mode="lines",
             name=f"{scenario_name}情景预测",
-            line=dict(color=laser_purple, width=4, dash="dash"),
+            line=dict(color=laser_purple, width=3, dash="dash"),
             hovertemplate="<b>预测日期</b>: %{x}<br>"
                           "<b>预测值</b>: %{y:,.2f}<br>"
                           "<b>AI 风险提示</b>: %{customdata}"
@@ -585,25 +598,25 @@ def build_forecast_figure(
 
     fig.update_layout(
         template=template,
-        paper_bgcolor="#000000",
-        plot_bgcolor="#050816",
+        paper_bgcolor=BG_MAIN,
+        plot_bgcolor="#FFFFFF",
         margin=dict(l=40, r=40, t=60, b=40),
         hovermode="x unified",
         title=dict(
-            text=f"🔮 暗黑科技 · AI 现金流预测（情景：{scenario_name}）",
+            text=f"🔮 科技玻璃 · AI 现金流预测（情景：{scenario_name}）",
             x=0.5,
-            font=dict(size=26, color="#E5E7EB"),
+            font=dict(size=24, color=TEXT_MAIN),
         ),
         xaxis=dict(
             title="日期",
             tickangle=-45,
-            gridcolor="rgba(255,255,255,0.08)",
-            color="#D1D5DB",
+            gridcolor="rgba(209,213,219,0.7)",
+            color="#374151",
         ),
         yaxis=dict(
             title="净现金流（元）",
-            gridcolor="rgba(255,255,255,0.08)",
-            color="#D1D5DB",
+            gridcolor="rgba(209,213,219,0.7)",
+            color="#374151",
         ),
         legend=dict(
             orientation="h",
@@ -611,18 +624,17 @@ def build_forecast_figure(
             y=1.02,
             xanchor="right",
             x=1,
-            font=dict(color="#E5E7EB"),
+            font=dict(color="#4B5563"),
         ),
     )
 
-    fig.update_xaxes(showline=True, linewidth=2, linecolor="rgba(0,191,255,0.6)")
-    fig.update_yaxes(showline=True, linewidth=2, linecolor="rgba(0,191,255,0.6)")
+    fig.update_xaxes(showline=True, linewidth=1.2, linecolor="rgba(148,163,184,0.9)")
+    fig.update_yaxes(showline=True, linewidth=1.2, linecolor="rgba(148,163,184,0.9)")
 
     return fig
 
 
 def generate_ai_commentary(forecast_df: pd.DataFrame, scenario: str):
-    """基于未来预测结果，生成若干条“AI 司库点评”"""
     vals = forecast_df["预测均值"].values
     mean_val = float(vals.mean())
     min_val = float(vals.min())
@@ -635,32 +647,28 @@ def generate_ai_commentary(forecast_df: pd.DataFrame, scenario: str):
 
     lines = []
 
-    # 情景描述
     if scenario == "乐观":
-        lines.append("当前为【乐观情景】，假设收入端兑现度较高、支出执行较为审慎，预测结果整体略向上偏离基准。")
+        lines.append("当前为【乐观情景】，假设收入兑现度较高、支出执行较为审慎，预测结果整体略向上偏离基准。")
     elif scenario == "谨慎":
-        lines.append("当前为【谨慎情景】，在收入略有打折、支出略有提前的情况下，对未来现金流作保守估计。")
+        lines.append("当前为【谨慎情景】，在收入打折、支出略有提前的假设下，对未来现金流作保守估计。")
     else:
         lines.append("当前为【中性情景】，在既定预算与历史趋势假设下，对未来现金流进行基准预测。")
 
-    # 整体水平
     if mean_val >= 0:
-        lines.append(f"从均值看，未来一段时间净现金流约为 **{mean_val:,.0f} 元/天**，整体处于可控区间。")
+        lines.append(f"从均值看，预测区间内日均净现金流约为 **{mean_val:,.0f} 元**，整体处于可控区间。")
     else:
-        lines.append(f"从均值看，未来一段时间净现金流约为 **{mean_val:,.0f} 元/天**，呈一定程度的资金净流出。")
+        lines.append(f"从均值看，预测区间内日均净现金流约为 **{mean_val:,.0f} 元**，呈一定资金净流出态势。")
 
-    # 波动性
     if std_val < abs(mean_val) * 0.3:
         lines.append("现金流波动率相对温和，说明收支节奏较为平滑，有利于司库做中短期资金统筹。")
     else:
-        lines.append("现金流波动率较高，建议结合项目进度和回款计划，对大额收支点进行专项跟踪和排期。")
+        lines.append("现金流波动率偏高，建议围绕大额收支时点开展专项排期和“日计划”管理。")
 
-    # 资金缺口和预警
     if neg_ratio == 0:
         lines.append("预测区间内未出现净现金流为负的时点，短期资金安全边际较高，可在风险可控前提下适度提高资金使用效率。")
     elif neg_ratio < 0.3:
         lines.append(
-            f"约有 {neg_ratio*100:.1f}% 的预测日期出现净现金流为负，"
+            f"约有 {neg_ratio*100:.1f}% 的预测日期净现金流为负，"
             f"首次缺口预计在 **{first_neg_date}**，建议提前准备流动性备份方案。"
         )
     else:
@@ -669,7 +677,6 @@ def generate_ai_commentary(forecast_df: pd.DataFrame, scenario: str):
             f"且最低值下探至 **{min_val:,.0f} 元**，需要从压降支出、加快回款和银行授信等多维度协同化解。"
         )
 
-    # 尾部风险
     if min_val < 0 and abs(min_val) > abs(mean_val) * 2:
         lines.append("极端情形下的最小净现金流偏低，存在尾部风险，建议结合压力测试场景，制定应急资金预案。")
     else:
@@ -706,11 +713,10 @@ def render_fx_risk_page():
     with st.spinner("正在进行汇率路径模拟（GBM 模型）..."):
         dt = horizon_days / 252.0
         sigma = vol_annual / 100.0
-        mu = 0.0  # 中性漂移
+        mu = 0.0
 
         z = np.random.randn(n_sims)
         rates = spot * np.exp((mu - 0.5 * sigma ** 2) * dt + sigma * np.sqrt(dt) * z)
-
         values_base = exposure * rates
 
         mean_val = float(values_base.mean())
@@ -755,7 +761,7 @@ def render_fx_risk_page():
             nbinsx=40,
             name="本位币价值分布",
             marker=dict(color="#38BDF8"),
-            opacity=0.8,
+            opacity=0.85,
         )
     )
     fig.add_vline(
@@ -768,9 +774,9 @@ def render_fx_risk_page():
     )
 
     fig.update_layout(
-        template="plotly_dark",
-        paper_bgcolor="#000000",
-        plot_bgcolor="#020617",
+        template="plotly_white",
+        paper_bgcolor=BG_MAIN,
+        plot_bgcolor="#FFFFFF",
         margin=dict(l=40, r=40, t=40, b=40),
         xaxis_title="未来某一日的本位币价值",
         yaxis_title="模拟频数",
@@ -793,8 +799,8 @@ def render_pool_simulator_page():
     st.subheader("🏦 集团资金池模拟器（总部 + 子公司）")
 
     st.markdown(
-        "通过简单的参数设置，模拟“总部司库 + 子公司 A/B”的资金集中效果，"
-        "用于演示《内部银行 / 资金池》机制对资金使用效率的改善。"
+        "通过简单参数设置，模拟“总部司库 + 子公司 A/B”的资金集中效果，"
+        "用于演示内部银行 / 资金池机制对资金使用效率的改善。"
     )
 
     col1, col2, col3 = st.columns(3)
@@ -819,8 +825,6 @@ def render_pool_simulator_page():
     total_cash = hq_cash + a_cash + b_cash
     target_hq_cash = total_cash * target_hq_ratio
 
-    # 初步思路：子公司在保证自身安全备付线的前提下，尽量把多余资金归集到总部；
-    # 如果总部仍低于目标集中度，再考虑从目标略高的子公司处临时拆入。
     a_surplus = max(0.0, a_cash - a_min)
     b_surplus = max(0.0, b_cash - b_min)
 
@@ -838,7 +842,6 @@ def render_pool_simulator_page():
         collect_from_b = from_b
         need_for_hq -= from_b
 
-    # 归集后余额
     hq_after = hq_cash + collect_from_a + collect_from_b
     a_after = a_cash - collect_from_a
     b_after = b_cash - collect_from_b
@@ -870,14 +873,14 @@ def render_pool_simulator_page():
     before_vals = [hq_cash, a_cash, b_cash]
     after_vals = [hq_after, a_after, b_after]
 
-    fig.add_trace(go.Bar(x=entities, y=before_vals, name="归集前", marker_color="#1D4ED8"))
-    fig.add_trace(go.Bar(x=entities, y=after_vals, name="归集后", marker_color="#22C55E"))
+    fig.add_trace(go.Bar(x=entities, y=before_vals, name="归集前", marker_color="#93C5FD"))
+    fig.add_trace(go.Bar(x=entities, y=after_vals, name="归集后", marker_color="#34D399"))
 
     fig.update_layout(
-        template="plotly_dark",
+        template="plotly_white",
         barmode="group",
-        paper_bgcolor="#000000",
-        plot_bgcolor="#020617",
+        paper_bgcolor=BG_MAIN,
+        plot_bgcolor="#FFFFFF",
         margin=dict(l=40, r=40, t=40, b=40),
         yaxis_title="现金余额（元）",
     )
@@ -893,41 +896,41 @@ def render_pool_simulator_page():
 
 
 # ============================================================
-# 十、首页动画
+# 十、首页动画（亮色科技玻璃）
 # ============================================================
 
 def render_home_page():
     st.markdown(
         """
         <div class="home-hero">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
                 <div class="pulse-dot"></div>
-                <div style="font-size:14px;color:#9CA3AF;">Treasury · AI · Risk Management</div>
+                <div style="font-size:13px;color:#6B7280;">Treasury · AI · Risk Management</div>
             </div>
-            <div class="home-hero-title">AI 赋能司库 · 暗黑科技驾驶舱</div>
+            <div class="home-hero-title">AI 赋能司库 · 科技玻璃财务驾驶舱</div>
             <div class="home-hero-sub">
                 以现金流预测为核心，联动汇率风险监控与资金池模拟，
                 打造面向现代投资与海外项目的数字化财务中枢。
             </div>
             <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;">
-                <div class="card float-card" style="flex:1;min-width:200px;">
+                <div class="card float-card" style="flex:1;min-width:220px;">
                     <div class="card-title">模块一：现金流预测与预警</div>
                     <div class="card-sub">
                         基于 LSTM + MC Dropout 的日度现金流预测，
                         提供情景分析、缺口预警与 AI 自动点评。
                     </div>
                 </div>
-                <div class="card float-card" style="flex:1;min-width:200px;">
+                <div class="card float-card" style="flex:1;min-width:220px;">
                     <div class="card-title">模块二：汇率风险监控</div>
                     <div class="card-sub">
-                        通过 GBM 模拟外币敞口价值分布，输出 VaR 指标，
+                        使用 GBM 模拟外币敞口价值分布，输出 VaR 指标，
                         服务于海外项目与跨境结算管理。
                     </div>
                 </div>
-                <div class="card float-card" style="flex:1;min-width:200px;">
+                <div class="card float-card" style="flex:1;min-width:220px;">
                     <div class="card-title">模块三：集团资金池模拟</div>
                     <div class="card-sub">
-                        演示总部与子公司间的资金集中与下拨，
+                        演示总部与子公司间资金集中与下拨，
                         支撑内部银行与司库体系的制度设计。
                     </div>
                 </div>
@@ -937,10 +940,10 @@ def render_home_page():
         unsafe_allow_html=True,
     )
 
-    st.markdown("### 如何使用本系统？")
+    st.markdown("### 使用指南")
     st.markdown(
-        "- 左侧侧边栏选择不同模块：**首页 / 现金流预测主面板 / 汇率风险监控 / 资金池模拟器**；  \n"
-        "- 进入“现金流预测主面板”后，可上传 CSV 或使用模拟数据进行模型训练与预测；  \n"
+        "- 左侧选择不同模块：**首页 / 现金流预测主面板 / 汇率风险监控 / 资金池模拟器**；  \n"
+        "- 现金流预测模块支持上传 CSV 或使用模拟数据进行训练与预测；  \n"
         "- 汇率与资金池模块以场景模拟形式展示 AI 司库在风险管理和资金统筹上的应用。"
     )
 
@@ -950,10 +953,9 @@ def render_home_page():
 # ============================================================
 
 def render_cashflow_page():
-    st.subheader("📊 资金监控大屏 Dashboard（暗黑科技版）")
+    st.subheader("📊 资金监控大屏 Dashboard（科技玻璃版）")
 
-    # 侧边栏数据与模型参数
-    st.sidebar.markdown("### ⚙ 数据与模型参数（现金流预测）")
+    st.sidebar.markdown("<div class='sidebar-header'>⚙ 数据与模型参数（现金流预测）</div>", unsafe_allow_html=True)
 
     uploaded_file = st.sidebar.file_uploader("📤 上传现金流 CSV（含 date 列）", type=["csv"])
     use_synthetic = st.sidebar.checkbox(
@@ -975,7 +977,7 @@ def render_cashflow_page():
 
     run_button = st.sidebar.button("🚀 开始训练与预测")
 
-    # 顶部概览
+    # 数据加载
     if use_synthetic:
         df = generate_synthetic_data()
     else:
@@ -990,6 +992,7 @@ def render_cashflow_page():
 
     df = basic_preprocess(df)
 
+    # 顶部指标卡片
     last_net_cf = float(df["net_cash_flow"].iloc[-1])
     last30_std = float(df["net_cash_flow"].tail(30).std())
     avg7 = float(df["net_cash_flow"].tail(7).mean())
@@ -1033,7 +1036,7 @@ def render_cashflow_page():
         st.success("未来短期净现金流整体平稳偏正，资金安全边际较为充足，可稳步推进既定经营计划。")
 
     # 数据预览
-    st.markdown("### 📁 数据预览（暗黑表格 · 中文表头）")
+    st.markdown("### 📁 数据预览（中文表头）")
     preview = df[["date", "cash_in", "cash_out", "net_cash_flow"]].copy()
     preview.rename(columns=COLUMN_NAME_MAP, inplace=True)
     preview["日期"] = format_date_series(preview["日期"])
@@ -1043,6 +1046,7 @@ def render_cashflow_page():
         st.info("请在左侧设置参数后，点击“开始训练与预测”。")
         return
 
+    # 模型训练
     target = "net_cash_flow"
     multi_features = [
         "net_cash_flow", "sales", "project_spend",
@@ -1050,7 +1054,6 @@ def render_cashflow_page():
     ]
     multi_features = [c for c in multi_features if c in df.columns]
 
-    # 模型训练
     col1, col2 = st.columns(2)
     try:
         with col1:
@@ -1076,7 +1079,7 @@ def render_cashflow_page():
 
     history = hist2.copy()
 
-    # 多步预测 + 集成 + 情景
+    # 集成预测 + 情景
     st.subheader("🔮 现金流预测（集成模型 + 置信区间 + 情景）")
     with st.spinner("正在进行多步预测与不确定性估计…"):
         last1 = X1[-window_size:]
@@ -1098,8 +1101,8 @@ def render_cashflow_page():
         future_dates = [last_date + timedelta(days=i + 1) for i in range(forecast_days)]
 
         base_mean = w1 * mean1 + w2 * mean2
-        base_low = w1 * low1 + w2 * low1
-        base_high = w1 * high1 + w2 * high1
+        base_low = w1 * low1 + w2 * low2
+        base_high = w1 * high1 + w2 * high2
 
         if scenario == "乐观":
             factor = 1.10
@@ -1124,7 +1127,7 @@ def render_cashflow_page():
     )
 
     # 图表
-    fig = build_forecast_figure(history, forecast_df, scenario, "暗黑模式")
+    fig = build_forecast_figure(history, forecast_df, scenario, "亮色模式")
     st.plotly_chart(fig, use_container_width=True)
 
     # AI 自动点评
@@ -1224,24 +1227,23 @@ def render_cashflow_page():
 
 def main():
     st.set_page_config(
-        page_title="AI 赋能司库：暗黑科技 · 现金流预测系统",
+        page_title="AI 赋能司库：科技玻璃 · 现金流预测系统",
         layout="wide"
     )
 
-    # 顶部标题区（所有页面共用）
     col_logo, col_title, col_mode = st.columns([1, 4, 2])
 
     with col_logo:
         logo_path = "logo.png"
         if os.path.exists(logo_path):
-            st.image(logo_path, width=80)
+            st.image(logo_path, width=70)
         else:
             st.markdown(
                 f"""
-                <div style='width:80px;height:80px;border-radius:18px;
-                background:radial-gradient(circle at 10% 20%, #1D4ED8 0%, #020617 55%);
+                <div style='width:70px;height:70px;border-radius:18px;
+                background:linear-gradient(135deg, #3B82F6 0%, #22C55E 40%, #FACC15 100%);
                 display:flex;align-items:center;justify-content:center;
-                box-shadow:0 0 20px rgba(59,130,246,0.8);'>
+                box-shadow:0 12px 30px rgba(37,99,235,0.45);'>
                     <span style='color:white;font-weight:bold;font-size:18px;'>AI</span>
                 </div>
                 """,
@@ -1251,8 +1253,8 @@ def main():
     with col_title:
         st.markdown(
             f"""
-            <h1>AI 赋能司库 · 暗黑科技财务驾驶舱</h1>
-            <h4 style="color:{GOLD};margin-top:-8px;">
+            <h1>AI 赋能司库 · 科技玻璃财务驾驶舱</h1>
+            <h4 style="color:{TEXT_SUB};margin-top:-8px;">
                 现金流预测 × 汇率风险 × 资金池模拟 × 场景化决策支持
             </h4>
             """,
@@ -1273,10 +1275,9 @@ def main():
 
     st.markdown("---")
 
-    # 左侧模块选择
-    st.sidebar.markdown("### 🧭 功能模块")
+    st.sidebar.markdown("<div class='sidebar-header'>🧭 功能模块</div>", unsafe_allow_html=True)
     page = st.sidebar.radio(
-        "请选择要展示的模块",
+        "",
         ["首页", "现金流预测主面板", "汇率风险监控", "资金池模拟器"],
         index=0
     )

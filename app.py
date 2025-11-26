@@ -1,3 +1,6 @@
+# app.py
+# AI 赋能司库：科技玻璃风 · 现金流预测 & 汇率风险 & 资金池模拟器
+
 import os
 import warnings
 from datetime import datetime, timedelta
@@ -893,22 +896,20 @@ def render_pool_simulator_page():
 
 
 # ============================================================
-# 十、首页动画（亮色科技玻璃）
+# 十、首页：科技光效 + 曲线 Hero SVG 动画背景
 # ============================================================
 
 def render_home_page():
-    # ==========================
-    # 科技感动画光效 CSS（亮色科技玻璃风）
-    # ==========================
+    # ====== 动画光效 & SVG 曲线背景 CSS ======
     st.markdown(
         """
         <style>
 
         /* 🌟 光束动画（Neon Beam） */
         @keyframes neon-beam {
-            0%   { opacity: 0.0; transform: translateX(-200px) translateY(-80px) rotate(12deg); }
-            50%  { opacity: 0.35; transform: translateX(0px) translateY(0px) rotate(12deg); }
-            100% { opacity: 0.0; transform: translateX(200px) translateY(80px) rotate(12deg); }
+            0%   { opacity: 0.0; transform: translateX(-240px) translateY(-80px) rotate(12deg); }
+            50%  { opacity: 0.38; transform: translateX(0px) translateY(0px) rotate(12deg); }
+            100% { opacity: 0.0; transform: translateX(240px) translateY(80px) rotate(12deg); }
         }
 
         .neon-beam-layer {
@@ -919,7 +920,7 @@ def render_home_page():
             bottom:0;
             background: linear-gradient(120deg, rgba(59,130,246,0.25), rgba(56,189,248,0.20), rgba(250,204,21,0.18));
             filter: blur(36px);
-            animation: neon-beam 6s ease-in-out infinite;
+            animation: neon-beam 7s ease-in-out infinite;
             pointer-events:none;
         }
 
@@ -942,7 +943,32 @@ def render_home_page():
             pointer-events:none;
         }
 
-        /* 📦 玻璃卡片浮动动画 */
+        /* 📈 曲线 SVG 背景容器 */
+        .hero-svg-container {
+            position:absolute;
+            right:-40px;
+            bottom:-40px;
+            width:420px;
+            height:220px;
+            opacity:0.9;
+            pointer-events:none;
+        }
+
+        /* 线条描边动画 */
+        @keyframes path-draw {
+            0%   { stroke-dashoffset: 480; opacity: 0.0; }
+            20%  { opacity: 1.0; }
+            60%  { stroke-dashoffset: 0;  opacity: 1.0; }
+            100% { stroke-dashoffset: 0;  opacity: 0.35; }
+        }
+
+        .curve-path {
+            stroke-dasharray: 480;
+            stroke-dashoffset: 480;
+            animation: path-draw 6s ease-in-out infinite;
+        }
+
+        /* 玻璃卡片浮动动画 */
         @keyframes slow-float {
             0%   { transform: translateY(0px); }
             50%  { transform: translateY(-6px); }
@@ -958,9 +984,7 @@ def render_home_page():
         unsafe_allow_html=True
     )
 
-    # ==========================
-    # 首页内容区（亮色科技玻璃）
-    # ==========================
+    # ====== 首页内容区（带 SVG 背景） ======
     st.markdown(
         """
         <div class="home-hero" style="position:relative; overflow:hidden; border-radius:24px;">
@@ -969,29 +993,83 @@ def render_home_page():
             <div class="neon-beam-layer"></div>
             <div class="glow-wave"></div>
 
-            <!-- 🔹 顶部小标签 -->
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+            <!-- 曲线 Hero SVG 动画背景 -->
+            <div class="hero-svg-container">
+                <svg viewBox="0 0 400 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 渐变定义 -->
+                    <defs>
+                        <linearGradient id="gradLine" x1="0" y1="0" x2="400" y2="0">
+                            <stop offset="0%" stop-color="#38BDF8" />
+                            <stop offset="45%" stop-color="#6366F1" />
+                            <stop offset="100%" stop-color="#FACC15" />
+                        </linearGradient>
+                        <linearGradient id="gradFill" x1="0" y1="0" x2="0" y2="220">
+                            <stop offset="0%" stop-color="rgba(129,140,248,0.35)" />
+                            <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+                        </linearGradient>
+                    </defs>
+
+                    <!-- 背景淡网格 -->
+                    <g opacity="0.25">
+                        <path d="M0 40H400" stroke="#E5E7EB" stroke-width="0.5"/>
+                        <path d="M0 80H400" stroke="#E5E7EB" stroke-width="0.5"/>
+                        <path d="M0 120H400" stroke="#E5E7EB" stroke-width="0.5"/>
+                        <path d="M0 160H400" stroke="#E5E7EB" stroke-width="0.5"/>
+                        <path d="M0 200H400" stroke="#E5E7EB" stroke-width="0.5"/>
+
+                        <path d="M50 0V220" stroke="#E5E7EB" stroke-width="0.5"/>
+                        <path d="M150 0V220" stroke="#E5E7EB" stroke-width="0.5"/>
+                        <path d="M250 0V220" stroke="#E5E7EB" stroke-width="0.5"/>
+                        <path d="M350 0V220" stroke="#E5E7EB" stroke-width="0.5"/>
+                    </g>
+
+                    <!-- 填充区域 -->
+                    <path d="M10 170
+                             C 80 130, 120 110, 170 100
+                             C 230 88, 270 70, 330 60
+                             C 365 55, 390 65, 390 65
+                             L 390 220 L 10 220 Z"
+                          fill="url(#gradFill)" opacity="0.50"/>
+
+                    <!-- 主曲线 -->
+                    <path class="curve-path"
+                          d="M10 170
+                             C 80 130, 120 110, 170 100
+                             C 230 88, 270 70, 330 60
+                             C 365 55, 390 65, 390 65"
+                          stroke="url(#gradLine)"
+                          stroke-width="3.0"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                    <!-- 高亮端点 -->
+                    <circle cx="390" cy="65" r="4.5" fill="#FACC15" />
+                    <circle cx="10" cy="170" r="4" fill="#38BDF8" />
+                </svg>
+            </div>
+
+            <!-- 顶部小标签 -->
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;position:relative;z-index:2;">
                 <div class="pulse-dot"></div>
                 <div style="font-size:13px;color:#6B7280;">Financial AI · Treasury Intelligence</div>
             </div>
 
-            <!-- 🔹 主标题（更高级更科技） -->
-            <div class="home-hero-title" style="font-size:36px; font-weight:700; color:#0F172A;">
+            <!-- 主标题 -->
+            <div class="home-hero-title" style="font-size:36px; font-weight:700; color:#0F172A; position:relative;z-index:2;">
                 科技赋能财务 · 智能化司库中枢
             </div>
 
-            <!-- 🔹 副标题（专业 + 科技） -->
-            <div class="home-hero-sub" style="font-size:18px; color:#475569;">
+            <!-- 副标题 -->
+            <div class="home-hero-sub" style="font-size:18px; color:#475569; position:relative;z-index:2;">
                 一个整合 <span style="color:#2563EB;font-weight:600;">现金流预测</span>、
                 <span style="color:#2563EB;font-weight:600;">汇率风险管理</span> 与
                 <span style="color:#2563EB;font-weight:600;">集团资金池调度</span> 的
                 智能财务平台，支撑资金统筹、风险预警与跨境业务的数字化决策。
             </div>
 
-            <!-- 🔹 三个功能模块卡片 -->
-            <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:22px;">
+            <!-- 三个模块卡片 -->
+            <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:22px;position:relative;z-index:2;">
 
-                <!-- 卡片1 -->
                 <div class="card float-card" style="flex:1;min-width:240px;">
                     <div class="card-title" style="font-size:15px;font-weight:600;color:#1F2937;">
                         模块一：AI 现金流预测
@@ -1002,7 +1080,6 @@ def render_home_page():
                     </div>
                 </div>
 
-                <!-- 卡片2 -->
                 <div class="card float-card" style="flex:1;min-width:240px;">
                     <div class="card-title" style="font-size:15px;font-weight:600;color:#1F2937;">
                         模块二：汇率风险监控
@@ -1013,7 +1090,6 @@ def render_home_page():
                     </div>
                 </div>
 
-                <!-- 卡片3 -->
                 <div class="card float-card" style="flex:1;min-width:240px;">
                     <div class="card-title" style="font-size:15px;font-weight:600;color:#1F2937;">
                         模块三：集团资金池调度
@@ -1031,9 +1107,6 @@ def render_home_page():
         unsafe_allow_html=True
     )
 
-    # ==========================
-    # 使用说明
-    # ==========================
     st.markdown("### 🚀 使用说明（建议从左侧切换模块）")
     st.markdown(
         """
@@ -1044,6 +1117,7 @@ def render_home_page():
         - 所有模块均可用于方案汇报、司库建设展示及内部交流。
         """
     )
+
 
 # ============================================================
 # 十一、现金流预测主面板

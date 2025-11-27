@@ -14,11 +14,11 @@ import plotly.graph_objs as go
 warnings.filterwarnings("ignore")
 
 # ============================================================
-# 0. 全局页面设置 & 科技淡蓝主题
+# 0. 全局页面设置 & 主题
 # ============================================================
 
 st.set_page_config(
-    page_title="AI 司库 · 科技淡蓝财务驾驶舱",
+    page_title="AI 司库 · 财务驾驶舱",
     layout="wide"
 )
 
@@ -833,7 +833,7 @@ def render_home_page():
             </div>
 
             <div style="font-size:36px;font-weight:700;color:#0F172A;">
-                AI 司库 · 科技淡蓝财务驾驶舱
+                AI 司库 · 财务驾驶舱
             </div>
 
             <div style="font-size:17px;color:#475569;margin-bottom:18px;">
@@ -1128,7 +1128,7 @@ def main():
     with col_title:
         st.markdown(
             f"""
-            <h1>AI 司库 · 科技淡蓝财务驾驶舱</h1>
+            <h1>AI 司库 · 财务驾驶舱</h1>
             <h4 style="color:{TEXT_SUB};margin-top:-8px;">
                 现金流预测 · 汇率风险 · 资金池模拟 · 数字化决策支持
             </h4>

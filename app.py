@@ -28,37 +28,31 @@ ACCENT_GOLD = "#CFAF70"
 TEXT_MAIN = "#0F172A"
 TEXT_SUB = "#6B7280"
 
-BASE_CSS = """
+BASE_CSS = f"""
 <style>
-/* 整体背景 —— 淡蓝渐变而不是暗黑 */
 html, body, .stApp {{
     background: radial-gradient(circle at 0% 0%, #E0EDFF 0, #F3F7FF 45%, #FFFFFF 100%);
     color: {TEXT_MAIN};
     font-family: "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }}
-
 h1, h2, h3, h4, h5, h6 {{
     color: {TEXT_MAIN} !important;
 }}
-
 .sidebar .sidebar-content {{
     background: linear-gradient(180deg, #E5F0FF 0%, #F9FBFF 60%, #FFFFFF 100%);
 }}
-
 .big-number {{
     font-size: 26px;
     font-weight: 700;
     color: {PRIMARY_BLUE};
     text-align: center;
 }}
-
 .big-number-gold {{
     font-size: 26px;
     font-weight: 700;
     color: {ACCENT_GOLD};
     text-align: center;
 }}
-
 .card {{
     background: rgba(255, 255, 255, 0.85);
     border-radius: 16px;
@@ -68,57 +62,18 @@ h1, h2, h3, h4, h5, h6 {{
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
 }}
-
 .card-title {{
     font-size: 13px;
     color: {TEXT_SUB};
     text-align: center;
     margin-top: 8px;
 }}
-
 .card-sub {{
     font-size: 12px;
     color: #9CA3AF;
     text-align: center;
     margin-top: 4px;
 }}
-
-.home-hero {{
-    position: relative;
-    overflow: hidden;
-    border-radius: 24px;
-    padding: 30px 26px;
-    background:
-        radial-gradient(circle at 0% 0%, rgba(59,130,246,0.30) 0, transparent 45%),
-        radial-gradient(circle at 100% 0%, rgba(56,189,248,0.22) 0, transparent 55%),
-        radial-gradient(circle at 50% 120%, rgba(250,204,21,0.20) 0, transparent 55%),
-        #FFFFFFEE;
-    box-shadow: 0 24px 60px rgba(15,23,42,0.18);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-}}
-
-.home-hero-title {{
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 4px;
-    color: {TEXT_MAIN};
-}}
-
-.home-hero-sub {{
-    font-size: 17px;
-    color: {TEXT_SUB};
-    margin-bottom: 16px;
-}}
-
-.pulse-dot {{
-    width: 10px;
-    height: 10px;
-    border-radius: 999px;
-    background: #22C55E;
-    box-shadow: 0 0 14px rgba(34,197,94,0.9);
-}}
-
 .sidebar-header {{
     font-size: 14px;
     font-weight: 600;
@@ -130,7 +85,6 @@ h1, h2, h3, h4, h5, h6 {{
 """
 st.markdown(BASE_CSS, unsafe_allow_html=True)
 
-# 列名映射
 COLUMN_NAME_MAP = {
     "date": "日期",
     "cash_in": "现金流入",
@@ -174,7 +128,7 @@ def styled_table(df: pd.DataFrame):
             {"selector": "td",
              "props": [("background-color", "#FFFFFF"),
                        ("color", "#111827"),
-                       ("border-bottom", "1px solid #E5E7EB")]}
+                       ("border-bottom", "1px solid #E5E7EB")]},
         ]
     )
     return styler
@@ -763,134 +717,7 @@ def render_pool_simulator_page():
 
 
 # ============================================================
-# 8. 首页（淡蓝背景 + SVG 曲线 Hero）
-# ============================================================
-
-def render_home_page():
-
-    # 全局首页 CSS
-    st.markdown("""
-    <style>
-    @keyframes floatCard {
-        0%   { transform: translateY(0px); }
-        50%  { transform: translateY(-6px); }
-        100% { transform: translateY(0px); }
-    }
-    .glass-card {
-        background: rgba(255,255,255,0.78);
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
-        border-radius: 18px;
-        padding: 18px;
-        border: 1px solid rgba(148,163,184,0.35);
-        box-shadow: 0 8px 20px rgba(30,64,175,0.12);
-        animation: floatCard 4.5s ease-in-out infinite;
-    }
-    .pulse-dot {
-        width: 10px;
-        height: 10px;
-        background: #22C55E;
-        box-shadow: 0 0 12px rgba(34,197,94,0.7);
-        border-radius: 9999px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-    # ================= 首页 HTML 主体 ===================
-    st.markdown("""
-    <div style="position:relative; border-radius:24px; padding:36px; 
-                background: linear-gradient(180deg,#EAF4FF 0%,#FFFFFF 60%); 
-                overflow:hidden;">
-
-        <!-- SVG 曲线 HERO 背景 -->
-        <div style="position:absolute; inset:0; opacity:0.65; pointer-events:none;">
-            <svg viewBox="0 0 1200 320" xmlns="http://www.w3.org/2000/svg">
-
-                <defs>
-                    <linearGradient id="curveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="#60A5FA"/>
-                        <stop offset="60%" stop-color="#22D3EE"/>
-                        <stop offset="100%" stop-color="#FACC15"/>
-                    </linearGradient>
-                </defs>
-
-                <path d="M0,240 C220,120 520,280 820,150 C1020,80 1160,120 1200,130"
-                      fill="none" stroke="url(#curveGrad)" stroke-width="3" stroke-opacity="0.9"/>
-
-                <path d="M0,260 C260,150 520,310 860,190 C1040,130 1160,160 1200,180"
-                      fill="none" stroke="url(#curveGrad)" stroke-width="2" stroke-opacity="0.35"/>
-            </svg>
-        </div>
-
-        <!-- 内容层 -->
-        <div style="position:relative; z-index:2;">
-
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-                <div class="pulse-dot"></div>
-                <div style="font-size:13px;color:#6B7280;">
-                    Financial AI · Treasury Intelligence
-                </div>
-            </div>
-
-            <div style="font-size:36px;font-weight:700;color:#0F172A;">
-                AI 司库 · 财务驾驶舱
-            </div>
-
-            <div style="font-size:17px;color:#475569;margin-bottom:18px;">
-                一个整合 <span style="color:#2563EB;font-weight:600;">现金流预测</span>、
-                <span style="color:#2563EB;font-weight:600;">汇率风险管理</span> 与
-                <span style="color:#2563EB;font-weight:600;">集团资金池模拟</span> 的智能财务工作台，
-                用于支持资金统筹、风险预警与跨境业务的数字化决策。
-            </div>
-
-            <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:22px;">
-
-                <div class="glass-card" style="flex:1;min-width:260px;">
-                    <div style="font-size:15px;font-weight:600;color:#111827;">
-                        模块一：AI 现金流预测
-                    </div>
-                    <div style="font-size:13px;color:#6B7280;margin-top:6px;">
-                        LSTM + Dropout 不确定性预测，支持置信区间与自动点评。
-                    </div>
-                </div>
-
-                <div class="glass-card" style="flex:1;min-width:260px;">
-                    <div style="font-size:15px;font-weight:600;color:#111827;">
-                        模块二：汇率风险监控
-                    </div>
-                    <div style="font-size:13px;color:#6B7280;margin-top:6px;">
-                        GBM 路径模拟 + VaR 指标，用于外币敞口风险评估。
-                    </div>
-                </div>
-
-                <div class="glass-card" style="flex:1;min-width:260px;">
-                    <div style="font-size:15px;font-weight:600;color:#111827;">
-                        模块三：资金池模拟
-                    </div>
-                    <div style="font-size:13px;color:#6B7280;margin-top:6px;">
-                        演示总部与子公司之间的资金归集与下拨，提高资金使用效率。
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("### 🚀 使用说明")
-    st.markdown("""
-    - 在左侧选择模块进入功能  
-    - 可上传真实现金流数据进行预测  
-    - 用于司库建设演示、数字化呈现和方案展示  
-    """)
-
-
-
-
-# ============================================================
-# 9. 现金流预测主面板
+# 8. 现金流预测主面板
 # ============================================================
 
 def render_cashflow_page():
@@ -908,7 +735,6 @@ def render_cashflow_page():
     scenario = st.sidebar.radio("情景模式", ["谨慎", "中性", "乐观"], index=1)
     run_button = st.sidebar.button("🚀 开始训练与预测")
 
-    # 数据加载
     if use_synthetic:
         df = generate_synthetic_data()
     else:
@@ -963,7 +789,6 @@ def render_cashflow_page():
         st.info("请在左侧调整参数后，点击【开始训练与预测】。")
         return
 
-    # 模型训练
     target = "net_cash_flow"
     multi_features = ["net_cash_flow", "sales", "project_spend", "tax_payment", "cash_in", "cash_out"]
     multi_features = [c for c in multi_features if c in df.columns]
@@ -992,7 +817,6 @@ def render_cashflow_page():
 
     history = hist2.copy()
 
-    # 集成预测
     st.subheader("🔮 现金流预测（集成模型 + 置信区间 + 情景）")
     with st.spinner("正在进行多步预测与不确定性估计…"):
         last1 = X1[-window_size:]
@@ -1055,7 +879,6 @@ def render_cashflow_page():
         mime="text/csv",
     )
 
-    # 缺口预警
     st.subheader("🚨 资金缺口预警与调度建议")
     horizon = min(30, len(forecast_df))
     future_window = forecast_df.head(horizon).copy()
@@ -1084,7 +907,6 @@ def render_cashflow_page():
                 "建议提前统筹安排。"
             )
 
-    # 异常检测
     st.subheader("⚠ 历史净现金流异常检测")
     anomalies_raw = detect_anomalies_combined(history["date"], history[target])
     anomalies_cn = anomalies_to_chinese(anomalies_raw)
@@ -1093,7 +915,6 @@ def render_cashflow_page():
     else:
         st.dataframe(styled_table(anomalies_cn), use_container_width=True)
 
-    # 敏感性分析
     st.subheader("🔍 特征敏感性分析")
     if multi_features:
         sens_raw = feature_sensitivity_last_window(m2, X2[-window_size:], multi_features, ts2)
@@ -1104,10 +925,11 @@ def render_cashflow_page():
 
 
 # ============================================================
-# 10. 主入口
+# 9. 主入口（已删除首页）
 # ============================================================
 
 def main():
+
     col_logo, col_title, col_mode = st.columns([1, 4, 2])
     with col_logo:
         logo_path = "logo.png"
@@ -1152,13 +974,11 @@ def main():
     st.sidebar.markdown("<div class='sidebar-header'>🧭 功能模块</div>", unsafe_allow_html=True)
     page = st.sidebar.radio(
         "",
-        ["首页", "现金流预测主面板", "汇率风险监控", "资金池模拟器"],
+        ["现金流预测主面板", "汇率风险监控", "资金池模拟器"],
         index=0,
     )
 
-    if page == "首页":
-        render_home_page()
-    elif page == "现金流预测主面板":
+    if page == "现金流预测主面板":
         render_cashflow_page()
     elif page == "汇率风险监控":
         render_fx_risk_page()
